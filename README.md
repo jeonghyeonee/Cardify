@@ -1,2 +1,2 @@
-# Homomorphic_Card_Validator
-Team Project using Homomorphic
+# Cardify
+Team Project using Homomorphic Encryption with Sua Kim
