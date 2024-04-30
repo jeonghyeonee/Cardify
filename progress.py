@@ -207,9 +207,9 @@ dec.decrypt(result_discrete_equal_zero3, sk, result_discrete_equal_zero_message3
 print("=======================================================================================")
 print("Method 1")
 if round(result_discrete_equal_zero_message1[0].real, 2) == 1:
-    print("master")
-elif round(result_discrete_equal_zero_message2[0].real, 2) == 1:
     print("visa")
+elif round(result_discrete_equal_zero_message2[0].real, 2) == 1:
+    print("master")
 elif round(result_discrete_equal_zero_message3[0].real, 2) == 1:
     print("domestic")
 else:
@@ -308,9 +308,9 @@ dec.decrypt(result_discrete_equal_zero3, sk, result_discrete_equal_zero_message3
 # print("-------------------------------------------------------------------------------------")
 print("Method 2")
 if round(result_discrete_equal_zero_message1[0].real, 2) == 1:
-    print("master")
-elif round(result_discrete_equal_zero_message2[0].real, 2) == 1:
     print("visa")
+elif round(result_discrete_equal_zero_message2[0].real, 2) == 1:
+    print("master")
 elif round(result_discrete_equal_zero_message3[0].real, 2) == 1:
     print("domestic")
 else:
