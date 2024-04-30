@@ -1,6 +1,6 @@
 # Cardify
 
-# Card Number and Expiry Date Validation Program
+### Card Number and Expiry Date Validation Program
 
 This program is a Python script that validates card numbers and expiry dates using encryption technology. The program is developed using the PI-HEAAN (Homomorphic Encryption for Arithmetic of Approximate Numbers) library.
 
