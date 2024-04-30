@@ -67,6 +67,7 @@ def validate_expiry_date(expiry_date):
 expiry_date = input("카드 유효기간을 mm/yy 형태로 입력하세요: ")
 
 # 입력된 카드 번호의 유효성 검사
+
 if validate_card_number(card_number):
     print("입력한 카드 번호:", card_number)
 else:
@@ -203,6 +204,7 @@ dec.decrypt(result_discrete_equal_zero3, sk, result_discrete_equal_zero_message3
 # print(result_discrete_equal_zero_message3)
 
 # Result
+print("=======================================================================================")
 print("Method 1")
 if round(result_discrete_equal_zero_message1[0].real, 2) == 1:
     print("master")
@@ -303,7 +305,7 @@ dec.decrypt(result_discrete_equal_zero3, sk, result_discrete_equal_zero_message3
 # print(result_discrete_equal_zero_message3)
 
 # Result
-print("-------------------------------------------------------------------------------------")
+# print("-------------------------------------------------------------------------------------")
 print("Method 2")
 if round(result_discrete_equal_zero_message1[0].real, 2) == 1:
     print("master")
