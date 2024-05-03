@@ -1,0 +1,106 @@
+.body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f6f6f6;
+}
+
+.header {
+  background-color: #4285f4;
+  color: white;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.main {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  position: relative; /* main 요소를 상대적으로 위치 지정합니다. */
+}
+
+/* 수정된 CSS */
+.card-background {
+  position: fixed; /* card-background 요소를 고정 위치로 지정합니다. */
+  top: 50%; /* 화면의 중앙에서 수직으로 위치합니다. */
+  right: 50px; /* 화면 오른쪽에서 50px 떨어진 위치에 설정합니다. */
+  transform: translateY(-50%); /* 수직 정렬을 위한 변환을 적용합니다. */
+  width: 200px; /* 원하는 이미지 너비로 조정하세요. */
+  height: auto; /* 이미지의 높이는 자동으로 조정됩니다. */
+  background-image: url("card.png");
+  background-repeat: no-repeat;
+  background-size: contain;
+  z-index: -1; /* main 요소와 겹치지 않도록 z-index를 설정합니다. */
+}
+
+.card-input-container {
+  margin-bottom: 20px;
+}
+
+.card-number-inputs {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-number-input {
+  width: calc(25% - 5px); /* 카드 번호 입력 칸의 너비를 조정 */
+  height: 30px;
+  font-size: 16px;
+  text-align: center;
+}
+
+.card-images {
+  text-align: right; /* 이미지를 오른쪽 정렬 */
+  margin-bottom: 20px;
+}
+
+.card-image {
+  width: 50px;
+  height: auto;
+  margin-left: 5px;
+}
+
+.card-logo {
+  position: fixed;
+  top: 20%;
+  right: 190px;
+  transform: translateY(-50%);
+  width: 230px;
+  height: auto;
+  z-index: 1;
+}
+
+.expiry-date-input {
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+/* 유효기간 입력칸의 너비를 조정 */
+#expiry_month,
+#expiry_year {
+  width: 40px;
+}
+
+.card-number-divider {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 20px; /* "-"의 너비를 조정 */
+  height: 30px;
+  font-size: 16px;
+}
+
+.submit-button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.submit-button:hover {
+  background-color: #45a049;
+}
