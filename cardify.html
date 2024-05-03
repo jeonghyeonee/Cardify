@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cardify</title>
+    <link rel="stylesheet" href="cardify.css" />
+  </head>
+  <body>
+    <header class="header">
+      <h1>Cardify</h1>
+      <p>Card Validation Checking</p>
+      <img src="card.png" alt="Card" class="card-logo" />
+    </header>
+    <main class="main">
+      <div class="card-background"></div>
+
+      <form id="card_form" method="POST">
+        <div class="card-input-container">
+          <div>
+            <label for="card-number">카드 번호 입력 :</label>
+            <div class="card-number-inputs">
+              <input
+                type="text"
+                class="card-number-input"
+                maxlength="4"
+                required
+              />
+              <span class="card-number-divider">-</span>
+              <input
+                type="text"
+                class="card-number-input"
+                maxlength="4"
+                required
+              />
+              <span class="card-number-divider">-</span>
+              <input
+                type="text"
+                class="card-number-input"
+                maxlength="4"
+                required
+              />
+              <span class="card-number-divider">-</span>
+              <input
+                type="text"
+                class="card-number-input"
+                maxlength="4"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="card-images">
+          <img src="mastercard.png" alt="MasterCard" class="card-image" />
+          <img src="visa.png" alt="Visa" class="card-image" />
+        </div>
+
+        <div class="expiry-date-input">
+          <label for="expiry-date">유효기간 (MM/YY 형식):</label>
+          <input
+            type="text"
+            id="expiry_month"
+            name="expiry_month"
+            pattern="\d{2}"
+            maxlength="2"
+            required
+          />
+          /
+          <input
+            type="text"
+            id="expiry_year"
+            name="expiry_year"
+            pattern="\d{2}"
+            maxlength="2"
+            required
+          />
+        </div>
+        <input type="submit" value="유효성 체크" class="submit-button" />
+      </form>
+    </main>
+    <script src="cardify.js"></script>
+  </body>
+</html>
