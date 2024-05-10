@@ -1,4 +1,4 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, redirect, url_for
 
 app = Flask(__name__)
 
@@ -21,7 +21,8 @@ def validate():
         "expiry_year": request.form['expiry_year']
     }
     print("카드 정보를 성공적으로 받았습니다.")
-    return '카드 정보를 성공적으로 받았습니다.'
+    # 리디렉션 없이 현재 페이지에 머물기 위해 index.html을 다시 렌더링합니다.
+    return render_template('index.html')
 
 @app.route('/card-info', methods=['GET'])
 def get_card_info():
