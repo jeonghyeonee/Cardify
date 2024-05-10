@@ -9,6 +9,11 @@ response = requests.get(f'{api_url}/card-info')
 
 if response.status_code == 200:
     card_info = response.json()
-    print("카드 정보:", card_info)
+    # print("카드 정보:", card_info)
+    result = {"validation": "valid"}
+    # print(result['validation'])/
+    print("not valid")
+
 else:
     print('카드 정보를 가져오는 데 실패했습니다:', response.status_code)
+
