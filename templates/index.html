@@ -4,25 +4,31 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cardify</title>
-    <link rel="stylesheet" href="cardify.css" />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='cardify.css') }}"
+    />
   </head>
   <body>
     <header class="header">
       <h1>Cardify</h1>
       <p>Card Validation Checking</p>
-      <img src="card.png" alt="Card" class="card-logo" />
+      <img
+        src="{{ url_for('static', filename='card.png') }}"
+        alt="Card"
+        class="card-logo"
+      />
     </header>
     <main class="main">
       <div class="card-background"></div>
 
-      <form id="card_form" action="/validate" method="POST">
+      <form id="card_form" method="POST">
         <div class="card-input-container">
           <div>
             <label for="card-number">카드 번호 입력 :</label>
             <div class="card-number-inputs">
               <input
                 type="text"
-                name="card_number_1"
                 class="card-number-input"
                 maxlength="4"
                 required
@@ -30,7 +36,6 @@
               <span class="card-number-divider">-</span>
               <input
                 type="text"
-                name="card_number_2"
                 class="card-number-input"
                 maxlength="4"
                 required
@@ -38,7 +43,6 @@
               <span class="card-number-divider">-</span>
               <input
                 type="text"
-                name="card_number_3"
                 class="card-number-input"
                 maxlength="4"
                 required
@@ -46,7 +50,6 @@
               <span class="card-number-divider">-</span>
               <input
                 type="text"
-                name="card_number_4"
                 class="card-number-input"
                 maxlength="4"
                 required
@@ -56,8 +59,17 @@
         </div>
 
         <div class="card-images">
-          <img src="mastercard.png" alt="MasterCard" class="card-image" />
-          <img src="visa.png" alt="Visa" class="card-image" />
+          <img
+            src="{{ url_for('static', filename='mastercard.png') }}"
+            alt="Mastercard"
+            class="card-image"
+          />
+
+          <img
+            src="{{ url_for('static', filename='visa.png') }}"
+            alt="Visa"
+            class="card-image"
+          />
         </div>
 
         <div class="expiry-date-input">
@@ -71,6 +83,7 @@
             required
           />
           /
+
           <input
             type="text"
             id="expiry_year"
@@ -80,9 +93,50 @@
             required
           />
         </div>
-        <input type="submit" value="유효성 체크" class="submit-button" />
+        <input
+          type="button"
+          value="유효성 체크"
+          class="submit-button"
+          onclick="openModal()"
+        />
       </form>
     </main>
-    <script src="cardify.js"></script>
+
+    <!-- 모달 -->
+    <div id="myModal" class="modal" style="display: none">
+      <!-- 모달 초기에는 숨겨진 상태 -->
+      <div class="modal-content">
+        <button class="close-button" onclick="closeModal()">확인</button>
+        <!-- 수정된 버튼 -->
+        <h2>Result</h2>
+        <!-- 모달 제목 -->
+        <p>결과 : {{ result_card_type }}</p>
+        <!-- 내용 예시 -->
+        <p>Nulla nec est eget mi rhoncus lobortis.</p>
+        <!-- 내용 예시 -->
+        <p>
+          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+          posuere cubilia Curae.
+        </p>
+        <!-- 내용 예시 -->
+        <!-- 모달 닫기 버튼 -->
+        <p id="validationResult"></p>
+      </div>
+    </div>
+
+    <script>
+      function openModal() {
+        var modal = document.getElementById("myModal"); // 모달 요소 가져오기
+        var result = "{{ first_method_result() }}"; // first_method_result() 함수의 반환 값을 가져옴
+        modal.style.display = "block"; // 모달 표시
+        document.getElementById("result_card_type").innerHTML =
+          "결과: " + result; // 결과를 모달에 표시
+      }
+
+      function closeModal() {
+        var modal = document.getElementById("myModal"); // 모달 요소 가져오기
+        modal.style.display = "none"; // 모달 숨기기
+      }
+    </script>
   </body>
 </html>
