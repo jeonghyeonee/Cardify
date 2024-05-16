@@ -1,19 +1,41 @@
 from heaan_utils import Heaan
-import requests
 
-# Flask 애플리케이션의 URL
-api_url = 'http://127.0.0.1:5000'
+def validate_card_info(card_info):
+    """
+    카드 정보의 유효성을 검증합니다.
+    
+    Args:
+        card_info (dict): 카드 정보 딕셔너리
+    
+    Returns:
+        bool: 카드 정보의 유효성 여부
+    """
+    heaan_instance = Heaan()
+    
+    # 카드 번호 유효성 검사
+    card_num_valid = heaan_instance.validate_card_number(card_info['card_number'])
+    
+    # 유효기간 유효성 검사
+    expiry_date_valid = heaan_instance.validate_expiry_date(card_info['expiry_date'])
+    
+    return card_num_valid and expiry_date_valid
 
-# /card-info 엔드포인트에 GET 요청을 보내어 카드 정보를 가져옴
-response = requests.get(f'{api_url}/card-info')
+def main():
+    # 카드 정보 딕셔너리
+    card_info = {
+        'card_number_1': '1234',
+        'card_number_2': '1234',
+        'card_number_3': '5678',
+        'card_number_4': '5678',
+        'expiry_month': '01',
+        'expiry_year': '28'
+    }
+    
+    # 카드 정보 유효성 검사
+    if validate_card_info(card_info):
+        print("카드 정보가 유효합니다.")
+    else:
+        print("유효하지 않은 카드 정보입니다.")
 
-if response.status_code == 200:
-    card_info = response.json()
-    # print("카드 정보:", card_info)
-    result = {"validation": "valid"}
-    # print(result['validation'])/
-    print("not valid")
-
-else:
-    print('카드 정보를 가져오는 데 실패했습니다:', response.status_code)
-
+if __name__ == "__main__":
+    main()
