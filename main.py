@@ -1,18 +1,34 @@
 from heaan_utils import Heaan
+import requests
+from card_preprocessing import preprocess_card_number, preprocess_expiry_date
+from card_validity import validate_card_num
 
-# Heaan 클래스의 인스턴스 생성
-heaan_instance = Heaan()
+# Flask 애플리케이션의 URL
+api_url = 'http://127.0.0.1:5000'
 
-# Heaan 클래스의 메서드 호출
-heaan_instance.initialize()
+# /card-info 엔드포인트에 GET 요청을 보내어 카드 정보를 가져옴
+response = requests.get(f'{api_url}/card-info')
 
-def preprocess_card_number(card_info):
-    card_number = [int(num) for i in range(1, 5) for num in card_info[f'card_number_{i}']]
-    card_num_ctxt = heaan_instance.preprocess_card_number(card_number)
-    return card_num_ctxt
+if response.status_code == 200:
+    card_info = response.json()
+    print("카드 정보:", card_info)
 
-def preprocess_expiry_date(card_info):
-    expiry_month = int(card_info['expiry_month'])
-    expiry_year = int(card_info['expiry_year'])
-    valid_thru = expiry_year * 100 + expiry_month
-    return valid_thru
+    # 카드 번호 전처리
+    card_num_ctxt = preprocess_card_number(card_info)
+
+    # 유효기간 전처리
+    valid_thru = preprocess_expiry_date(card_info)
+
+    # print("카드 번호:", card_num_ctxt)
+    # print("유효기간:", valid_thru)
+    print(validate_card_num(card_num_ctxt))
+
+    # TODO: card_validation, identifier, expiration 함수 생성
+    # TODO: main에서 3개 함수를 불러서 실행만 하도록 함.
+
+    
+
+
+else:
+    print('카드 정보를 가져오는 데 실패했습니다:', response.status_code)
+

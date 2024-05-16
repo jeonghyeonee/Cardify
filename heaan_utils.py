@@ -43,40 +43,6 @@ class Heaan:
         self.pk.load_enc_key()
         self.pk.load_mult_key()
 
-    def preprocess_card_number(self, card_number):
-        number_list = [int(num) for num in card_number if num.isdigit()]
-        card_num = number_list + [0] * (self.num_slots - len(number_list))
-        card_num_msg = heaan.Message(self.log_slots)
-        for i in range(self.num_slots):
-            card_num_msg[i] = card_num[i]
-        card_num_ctxt = heaan.Ciphertext(self.context)
-        self.enc.encrypt(card_num_msg, self.pk, card_num_ctxt)
-        return card_num_ctxt
-
-    def preprocess_expiry_date(self, expiry_date):
-        expiry_list = [int(digit) for digit in expiry_date if digit.isdigit()]
-        result_list = [expiry_list[0] * 10, expiry_list[1] * 1, expiry_list[2] * 1000, expiry_list[3] * 100]
-        valid_date = sum(result_list)
-        valid_thru = [valid_date] + [0] * (self.num_slots - 1)
-        valid_thru_msg = heaan.Message(self.log_slots)
-        for i in range(self.num_slots):
-            valid_thru_msg[i] = valid_thru[i]
-        valid_thru_ctxt = heaan.Ciphertext(self.context)
-        self.enc.encrypt(valid_thru_msg, self.pk, valid_thru_ctxt)
-        return valid_thru_ctxt
-
-    def validate_card_number(self, card_number):
-        pattern = re.compile(r'^\d{4}-\d{4}-\d{4}-\d{4}$')
-        return bool(re.match(pattern, card_number))
-
-    def validate_expiry_date(self, expiry_date):
-        pattern = re.compile(r'^\d{2}/\d{2}$')
-        return bool(re.match(pattern, expiry_date))
-
-    def decrypt_result(self, ctxt):
-        result_message = heaan.Message(self.log_slots)
-        self.dec.decrypt(ctxt, self.sk, result_message)
-        return result_message
 
     def check_card_brand(self, card_num_ctxt):
         visa_num = [4] + [0] * (self.num_slots - 1)
@@ -163,3 +129,157 @@ class Heaan:
         plaintext = [msg[i].real for i in range(self.num_slots)]
         
         return plaintext
+    
+    def division(self, divided, divider):
+        cnt = [0] * self.num_slots
+        cnt_msg = heaan.Message(self.log_slots)
+        for i in range(self.num_slots):
+            cnt_msg[i] = cnt[i]
+        cnt_ctxt = heaan.Ciphertext(self.context)
+
+        self.enc.encrypt(cnt_msg, self.pk, cnt_ctxt)
+
+        # 1을 더해주기 위함
+        sig = [1] * self.num_slots
+
+        sig_msg = heaan.Message(self.log_slots)
+        for i in range(self.num_slots):
+            sig_msg[i] = sig[i]
+        sig_ctxt = heaan.Ciphertext(self.context)
+
+        self.enc.encrypt(sig_msg, self.pk, sig_ctxt)
+
+        # divider(10) encryption
+        divider = [divider] * self.num_slots
+
+        divider_msg = heaan.Message(self.log_slots)
+        for i in range(self.num_slots):
+            divider_msg[i] = divider[i]
+        divider_ctxt = heaan.Ciphertext(self.context)
+
+        self.enc.encrypt(divider_msg, self.pk, divider_ctxt)
+
+        # 나눗셈 연산을 위한 빼기
+        # 나머지 선언
+        remain = heaan.Ciphertext(self.context)
+        remain_msg = heaan.Message(self.log_slots)
+
+
+        self.eval.sub(divided, divider_ctxt, remain)
+        self.eval.add(cnt_ctxt, sig_ctxt, cnt_ctxt)
+        self.dec.decrypt(remain, self.sk, remain_msg)
+
+        print("1st rm: ", remain)
+        print("1st cnt: ", cnt_ctxt)
+
+        while True:
+            if remain_msg[0].real <= 0:
+                break
+            self.eval.sub(divided, divider_ctxt, remain)
+            self.eval.add(cnt_ctxt, sig_ctxt, cnt_ctxt)
+
+            self.dec.decrypt(remain, self.sk, remain_msg)
+
+            print("in while remain", remain)
+            # self.dec.decrypt(cnt_ctxt, self.sk, cnt_msg)
+            # self.dec.decrypt(divided_list, self.sk, divided_msg)
+            # print("utils remain:", remain)
+            
+        return cnt_ctxt, remain
+    
+
+    def multiply(self, ctxt, factor):
+        """
+        암호문을 주어진 상수로 곱합니다.
+
+        Args:
+            ctxt (heaan.Ciphertext): 곱할 암호문
+            factor (int): 곱할 상수
+
+        Returns:
+            heaan.Ciphertext: 곱셈 결과 암호문
+        """
+        result = heaan.Ciphertext(self.context)
+        self.eval.mult(ctxt, factor, result)
+
+        return result
+    
+    def subtract(self, ctxt1, ctxt2):
+        """
+        주어진 두 암호문을 뺀 결과를 반환합니다.
+        
+        Args:
+            ctxt1 (heaan.Ciphertext): 암호문 1
+            ctxt2 (heaan.Ciphertext): 암호문 2
+            
+        Returns:
+            heaan.Ciphertext: ctxt1 - ctxt2의 결과 암호문
+        """
+        result = heaan.Ciphertext(self.context)
+        self.eval.sub(ctxt1, ctxt2, result)
+        return result
+
+    def addition(self, ctxt1, ctxt2):
+        """
+        주어진 두 암호문을 더한 결과를 반환합니다.
+        
+        Args:
+            context (heaan.Context): HEAAN 암호 시스템의 컨텍스트
+            ctxt1 (heaan.Ciphertext): 암호문 1
+            ctxt2 (heaan.Ciphertext): 암호문 2
+            
+        Returns:
+            heaan.Ciphertext: ctxt1 + ctxt2의 결과 암호문
+        """
+        result = heaan.Ciphertext(self.context)
+        self.eval.add(ctxt1, ctxt2, result)
+        return result
+
+    def equal_zero(self, ctxt):
+        """
+        암호문이 0에 근접하는지 확인합니다.
+
+        Args:
+            context (piheaan.Context): 암호 연산에 필요한 맥락 정보가 포함된 객체
+            evaluator (piheaan.HomEvaluator): 암호 연산을 수행하는 evaluator 객체
+            ciphertext (piheaan.Ciphertext): 확인할 암호문
+
+        Returns:
+            bool: 암호문이 0에 근접하면 True, 그렇지 않으면 False
+        """
+        result = heaan.Ciphertext(self.context)
+        
+        approx.discrete_equal_zero(self.eval, ctxt, result)
+        
+        return result
+
+    def left_rotate(self, ctxt, rotation_amount):
+        """
+        암호문을 왼쪽으로 회전합니다.
+
+        Args:
+            ctxt (piheaan.Ciphertext): 회전할 암호문
+            rotation_amount (int): 회전할 양
+
+        Returns:
+            piheaan.Ciphertext: 왼쪽으로 회전된 암호문
+        """
+        result = heaan.Ciphertext(self.context)
+        self.eval.left_rotate(ctxt, rotation_amount, result)
+        return result
+
+    def right_rotate(self, ctxt, rotation_amount):
+        """
+        암호문을 오른쪽으로 회전합니다.
+
+        Args:
+            ctxt (piheaan.Ciphertext): 회전할 암호문
+            rotation_amount (int): 회전할 양
+
+        Returns:
+            piheaan.Ciphertext: 오른쪽으로 회전된 암호문
+        """
+        result = heaan.Ciphertext(self.context)
+        self.eval.right_rotate(ctxt, rotation_amount, result)
+        return result
+
