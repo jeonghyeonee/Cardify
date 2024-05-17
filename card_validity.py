@@ -21,12 +21,13 @@ def validate_card_num(ctxt):
         if i%2 == 0:
             if round(addition_remain_cnt_msg[i].real, 2) > 0:
                 # he.eval.add(total, addition_remain_cnt, total)
-                total_ctxt = he.addition(double_odd_ctxt, total_ctxt)
+                total_ctxt = he.addition(addition_remain_cnt, total_ctxt)
             else:
                 total_ctxt = he.addition(double_odd_ctxt, total_ctxt)
                 # he.eval.add(total, double_odd_ctxt, total)
                 # total_ctxt[0] += double_odd[i]
         else:
+            # print("card num: ", ctxt)
             total_ctxt = he.addition(total_ctxt, ctxt)
             # he.eval.add(total, ctxt, total)
         
@@ -39,17 +40,20 @@ def validate_card_num(ctxt):
         addition_remain_cnt = he.left_rotate(addition_remain_cnt, 1)
         double_odd_ctxt = he.left_rotate(double_odd_ctxt, 1)
         ctxt = he.left_rotate(ctxt, 1)
-    print("-----------------------------------")
-    print(total_ctxt)
+
+        # print("Total", total_ctxt)
 
     # 최종 합이 10의 배수인지 확인
     final_cnt, final_remain = he.division(total_ctxt, 10)
 
     # print(final_remain)
+    # print(final_remain)
 
     result = he.equal_zero(final_remain)
 
     result_msg = he.decrypt(result)
+
+    # print(result)
 
     if round(result_msg[0].real, 2) == 1:
         msg = "This card num is VALID!!!!"

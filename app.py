@@ -25,7 +25,7 @@ def validate():
     print("카드 정보를 성공적으로 받았습니다.")
     
     # subprocess를 사용하여 card_validity.py를 실행하고 결과 값을 받습니다.
-    result = subprocess.check_output(["python", "card_validity.py"])
+    result = subprocess.check_output(["python", "main.py"])
     
     # 결과 값을 validation_result에 저장합니다.
 # 결과를 UTF-8로 디코딩
