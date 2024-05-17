@@ -169,18 +169,15 @@ class Heaan:
         self.eval.add(cnt_ctxt, sig_ctxt, cnt_ctxt)
         self.dec.decrypt(remain, self.sk, remain_msg)
 
-        print("1st rm: ", remain)
-        print("1st cnt: ", cnt_ctxt)
-
         while True:
             if remain_msg[0].real <= 0:
                 break
-            self.eval.sub(divided, divider_ctxt, remain)
+            self.eval.sub(remain, divider_ctxt, remain)
             self.eval.add(cnt_ctxt, sig_ctxt, cnt_ctxt)
 
             self.dec.decrypt(remain, self.sk, remain_msg)
 
-            print("in while remain", remain)
+            # print("in while remain", remain)
             # self.dec.decrypt(cnt_ctxt, self.sk, cnt_msg)
             # self.dec.decrypt(divided_list, self.sk, divided_msg)
             # print("utils remain:", remain)
