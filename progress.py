@@ -7,6 +7,7 @@ import pandas as pd
 import os
 import re
 from datetime import datetime
+import time
 
 # set parameter
 params = heaan.ParameterPreset.FGb
