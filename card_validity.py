@@ -1,6 +1,12 @@
 from heaan_utils import Heaan
-from card_preprocessing import preprocess_card_number, preprocess_expiry_date, triple_preprocess_card_number
+from card_preprocessing import preprocess_card_number, preprocess_expiry_date, triple_preprocess_card_number, preprocess_expiry_month
 from datetime import datetime
+
+import logging
+
+# 로깅 설정
+logging.basicConfig(level=logging.DEBUG)  # DEBUG 레벨 이상의 로그를 출력
+
 
 he = Heaan()
 
@@ -152,10 +158,32 @@ def check_card_brand_method3(ctxt):
 
     return msg
 
-def check_expiry_date(ctxt):
+def check_expiry_date(ctxt, month_ctxt):
     date = [int(datetime.today().strftime("%y%m"))]
-    date_msg = he.feat_msg_generate(date)
     date_ctxt = he.encrypt(date)
+
+    # Check the Month: JAN ~ DEC
+    # Check: month > 0
+    zero_month = he.feat_msg_generate([0])
+    zero_month_ctxt = he.encrypt(zero_month)
+
+    result_month = he.comparing(month_ctxt, zero_month_ctxt)
+    result_month_msg = he.decrypt(result_month)
+
+    if round(result_month_msg[0].real, 2) <= 0.5:
+        msg = 0
+        return msg # NOT valid
+
+    # Check: month > 12
+    month_over = he.feat_msg_generate([0.12])
+    month_over_ctxt = he.encrypt(month_over)
+
+    result_month = he.comparing(month_ctxt, month_over_ctxt)
+    result_month_msg = he.decrypt(result_month)
+
+    if round(result_month_msg[0].real, 2) == 1:
+        msg = 0
+        return msg # NOT valid
 
     result_date = he.subtract(ctxt, date_ctxt)
     result_date_msg = he.decrypt(result_date)

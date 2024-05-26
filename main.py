@@ -1,7 +1,7 @@
 import sys
 import json
 from heaan_utils import Heaan
-from card_preprocessing import preprocess_card_number, preprocess_expiry_date, triple_preprocess_card_number
+from card_preprocessing import preprocess_card_number, preprocess_expiry_date, triple_preprocess_card_number, preprocess_expiry_month
 from card_validity import validate_card_num, check_card_brand_method1, check_card_brand_method2, check_card_brand_method3, check_expiry_date
 
 def main(card_info):
@@ -14,12 +14,15 @@ def main(card_info):
     # 유효기간 전처리
     valid_thru_ctxt = preprocess_expiry_date(card_info)
 
+    # Check the Month: JAN ~ DEC
+    valid_month = preprocess_expiry_month(card_info)
+
     card_result = {}
     
     # Store the results in the dictionary
     card_result['card_validity'] = validate_card_num(card_num_ctxt)
     card_result['card_brand'] = check_card_brand_method3(triple_card_num_ctxt)
-    card_result['expiry_date_validity'] = check_expiry_date(valid_thru_ctxt)
+    card_result['expiry_date_validity'] = check_expiry_date(valid_thru_ctxt, valid_month)
 
     return card_result
 

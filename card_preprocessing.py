@@ -27,6 +27,17 @@ def preprocess_expiry_date(card_info):
 
     return valid_thru_ctxt
 
+def preprocess_expiry_month(card_info):
+    expiry_month = int(card_info['expiry_month'])
+
+    month_msg = heaan_instance.feat_msg_generate([expiry_month])
+
+    month_ctxt = heaan_instance.encrypt(month_msg)
+
+    month_ctxt = heaan_instance.multiply(month_ctxt, 0.01)
+
+    return month_ctxt
+
 def triple_preprocess_card_number(card_info):
     card_number = [int(num) for i in range(1, 5) for num in card_info[f'card_number_{i}']]
 

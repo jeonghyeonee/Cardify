@@ -279,4 +279,19 @@ class Heaan:
         result = heaan.Ciphertext(self.context)
         self.eval.right_rotate(ctxt, rotation_amount, result)
         return result
+    
+    def comparing(self, ctxt1, ctxt2):
+        """
+        두 개의 암호문을 비교하여 각 슬롯의 값이 크기를 비교합니다.
+
+        Args:
+            ctxt1 (piheaan.Ciphertext): 비교할 암호문 1
+            ctxt2 (piheaan.Ciphertext): 비교할 암호문 2
+
+        Returns:
+            float: 암호문 1의 각 슬롯의 값이 암호문 2의 각 슬롯의 값보다 크면 1, 작으면 0, 동일하면 0.5를 반환합니다.
+        """
+        result = heaan.Ciphertext(self.context)
+        approx.compare(self.eval, ctxt1, ctxt2, result)
+        return result
 
