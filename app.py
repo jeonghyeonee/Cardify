@@ -1,5 +1,6 @@
 from flask import Flask, render_template, jsonify, request, redirect, url_for
 import subprocess
+import json
 
 app = Flask(__name__)
 
@@ -24,17 +25,15 @@ def validate():
     }
     print("카드 정보를 성공적으로 받았습니다.")
     
-    # subprocess를 사용하여 card_validity.py를 실행하고 결과 값을 받습니다.
-    result = subprocess.check_output(["python", "main.py"])
+    # card_info를 JSON 문자열로 변환합니다.
+    card_info_json = json.dumps(card_info)
+    
+    # subprocess를 사용하여 main.py를 실행하고 결과 값을 받습니다.
+    result = subprocess.check_output(["python", "main.py", card_info_json])
     
     # 결과 값을 validation_result에 저장합니다.
-# 결과를 UTF-8로 디코딩
-    try:
-        validation_result = result.decode("utf-8").strip()
-    except UnicodeDecodeError:
-        # UTF-8로 디코딩할 수 없는 경우 다른 인코딩 방식 시도
-        validation_result = result.decode("latin-1").strip()
-
+    validation_result = json.loads(result.decode("utf-8").strip())
+    
     print("validation result: ", validation_result)
     
     # 리디렉션 없이 현재 페이지에 머물기 위해 index.html을 다시 렌더링합니다.

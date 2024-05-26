@@ -3,10 +3,85 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>결과</title>
+    <title>Result Page</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='cardify.css') }}"
+    />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+      }
+
+      .modal-content {
+        background-color: #ffffff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        max-width: 400px;
+        margin: 0 auto;
+      }
+
+      .close {
+        color: #333;
+        float: right;
+        font-size: 20px;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      p {
+        color: #333;
+        font-size: 16px;
+        line-height: 1.5;
+        margin-bottom: 10px;
+      }
+
+      .result-heading {
+        color: #0066ff;
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 15px;
+      }
+    </style>
   </head>
   <body>
-    <h1>결과</h1>
-    <p>유효성 검사 결과: {{ validation_result }}</p>
+    <div id="myModal" class="modal" style="display: block">
+      <div class="modal-content">
+        <span
+          class="close"
+          onclick="window.location.href='{{ url_for('index') }}'"
+          >&times;</span
+        >
+        <p class="result-heading">Validation Test Result</p>
+        <div id="card-result">
+          <p>
+            Card Number Validity: {% if validation_result['card_validity'] == 1
+            %} Valid 😁 {% else %} Not Valid 🤨{% endif %}
+          </p>
+          <p>
+            Card Brand: {% if validation_result['card_brand'] == 0 %}
+            <img
+              src="{{ url_for('static', filename='visa.png') }}"
+              alt="Visa"
+              class="card-image"
+            />
+            {% elif validation_result['card_brand'] == 1 %}
+            <img
+              src="{{ url_for('static', filename='mastercard.png') }}"
+              alt="mastercard"
+              class="card-image"
+            />{% elif validation_result['card_brand'] == 3 %} Domestic {% else
+            %} Not valid 🤨 {% endif %}
+          </p>
+          <p>
+            Expiration Date Validity : {% if
+            validation_result['expiry_date_validity'] == 1 %} Valid 😁 {% else
+            %} Not Valid 🤨 {% endif %}
+          </p>
+        </div>
+      </div>
+    </div>
   </body>
 </html>

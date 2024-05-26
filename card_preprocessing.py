@@ -30,9 +30,9 @@ def preprocess_expiry_date(card_info):
 def triple_preprocess_card_number(card_info):
     card_number = [int(num) for i in range(1, 5) for num in card_info[f'card_number_{i}']]
 
-    tripe_card_num = card_number * 3
+    triple_card_num = card_number * 3
 
-    card_num = heaan_instance.feat_msg_generate(tripe_card_num)
+    card_num = heaan_instance.feat_msg_generate(triple_card_num)
 
     card_num_ctxt = heaan_instance.encrypt(card_num)
 

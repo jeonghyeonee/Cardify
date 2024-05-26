@@ -1,18 +1,10 @@
+import sys
+import json
 from heaan_utils import Heaan
-import requests
-from card_preprocessing import preprocess_card_number, preprocess_expiry_date,triple_preprocess_card_number
+from card_preprocessing import preprocess_card_number, preprocess_expiry_date, triple_preprocess_card_number
 from card_validity import validate_card_num, check_card_brand_method1, check_card_brand_method2, check_card_brand_method3, check_expiry_date
 
-# Flask 애플리케이션의 URL
-api_url = 'http://127.0.0.1:5000'
-
-# /card-info 엔드포인트에 GET 요청을 보내어 카드 정보를 가져옴
-response = requests.get(f'{api_url}/card-info')
-
-if response.status_code == 200:
-    card_info = response.json()
-    print("카드 정보:", card_info)
-
+def main(card_info):
     # 카드 번호 전처리
     card_num_ctxt = preprocess_card_number(card_info)
 
@@ -26,14 +18,13 @@ if response.status_code == 200:
     
     # Store the results in the dictionary
     card_result['card_validity'] = validate_card_num(card_num_ctxt)
-    # card_result['card_brand_method1'] = check_card_brand_method1(card_num_ctxt)
-    # card_result['card_brand_method2'] = check_card_brand_method2(card_num_ctxt)
-    card_result['card_brand'] = check_card_brand_method3(card_num_ctxt)
+    card_result['card_brand'] = check_card_brand_method3(triple_card_num_ctxt)
     card_result['expiry_date_validity'] = check_expiry_date(valid_thru_ctxt)
 
-    print(card_result)
-    
+    return card_result
 
-else:
-    print('카드 정보를 가져오는 데 실패했습니다:', response.status_code)
-
+if __name__ == '__main__':
+    # 명령줄 인수로 전달된 JSON 문자열을 파싱합니다.
+    card_info = json.loads(sys.argv[1])
+    result = main(card_info)
+    print(json.dumps(result))

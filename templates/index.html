@@ -22,38 +22,18 @@
     <main class="main">
       <div class="card-background"></div>
 
-      <form id="card_form" method="POST">
+      <form id="card_form" method="POST" action="{{ url_for('validate') }}">
         <div class="card-input-container">
           <div>
-            <label for="card-number">카드 번호 입력 :</label>
+            <label for="card-number"> Input your card number :</label>
             <div class="card-number-inputs">
-              <input
-                type="text"
-                class="card-number-input"
-                maxlength="4"
-                required
-              />
+              <input type="text" name="card_number_1" maxlength="4" required />
               <span class="card-number-divider">-</span>
-              <input
-                type="text"
-                class="card-number-input"
-                maxlength="4"
-                required
-              />
+              <input type="text" name="card_number_2" maxlength="4" required />
               <span class="card-number-divider">-</span>
-              <input
-                type="text"
-                class="card-number-input"
-                maxlength="4"
-                required
-              />
+              <input type="text" name="card_number_3" maxlength="4" required />
               <span class="card-number-divider">-</span>
-              <input
-                type="text"
-                class="card-number-input"
-                maxlength="4"
-                required
-              />
+              <input type="text" name="card_number_4" maxlength="4" required />
             </div>
           </div>
         </div>
@@ -64,7 +44,6 @@
             alt="Mastercard"
             class="card-image"
           />
-
           <img
             src="{{ url_for('static', filename='visa.png') }}"
             alt="Visa"
@@ -73,20 +52,17 @@
         </div>
 
         <div class="expiry-date-input">
-          <label for="expiry-date">유효기간 (MM/YY 형식):</label>
+          <label for="expiry-date"> Card Expiration Date (MM/YY):</label>
           <input
             type="text"
-            id="expiry_month"
             name="expiry_month"
             pattern="\d{2}"
             maxlength="2"
             required
           />
           /
-
           <input
             type="text"
-            id="expiry_year"
             name="expiry_year"
             pattern="\d{2}"
             maxlength="2"
@@ -94,49 +70,48 @@
           />
         </div>
         <input
-          type="button"
-          value="유효성 체크"
+          type="submit"
+          value="Check validity"
           class="submit-button"
-          onclick="openModal()"
+          id="submit"
         />
       </form>
-    </main>
 
-    <!-- 모달 -->
-    <div id="myModal" class="modal" style="display: none">
-      <!-- 모달 초기에는 숨겨진 상태 -->
-      <div class="modal-content">
-        <button class="close-button" onclick="closeModal()">확인</button>
-        <!-- 수정된 버튼 -->
-        <h2>Result</h2>
-        <!-- 모달 제목 -->
-        <p>결과 : {{ result_card_type }}</p>
-        <!-- 내용 예시 -->
-        <p>Nulla nec est eget mi rhoncus lobortis.</p>
-        <!-- 내용 예시 -->
-        <p>
-          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-          posuere cubilia Curae.
-        </p>
-        <!-- 내용 예시 -->
-        <!-- 모달 닫기 버튼 -->
-        <p id="validationResult"></p>
+      <!-- <div id="myModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div id="modal-body">
+            <p>결과 화면</p>
+            <div id="card-result"></div>
+          </div>
+        </div>
       </div>
-    </div>
+    </main> 
 
     <script>
-      function openModal() {
-        var modal = document.getElementById("myModal"); // 모달 요소 가져오기
-        var result = "{{ first_method_result() }}"; // first_method_result() 함수의 반환 값을 가져옴
-        modal.style.display = "block"; // 모달 표시
-        document.getElementById("result_card_type").innerHTML =
-          "결과: " + result; // 결과를 모달에 표시
-      }
+      document.getElementById('card_form').addEventListener('submit', function(event) {
+          event.preventDefault();
+          fetch('{{ url_for('validate') }}', {
+              method: 'POST',
+              body: new FormData(this)
+          })
+          .then(response => response.text())
+          .then(data => {
+              document.getElementById('card-result').innerHTML = data;
+              document.getElementById('myModal').style.display = 'block';
+          });
+      });
 
-      function closeModal() {
-        var modal = document.getElementById("myModal"); // 모달 요소 가져오기
-        modal.style.display = "none"; // 모달 숨기기
+      document.querySelector('.close').addEventListener('click', function() {
+          document.getElementById('myModal').style.display = 'none';
+      }); 
+    
+
+      window.onclick = function(event) {
+          if (event.target == document.getElementById('myModal')) {
+              document.getElementById('myModal').style.display = 'none';
+          }
       }
-    </script>
+    </script>  -->
   </body>
 </html>
