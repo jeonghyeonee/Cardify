@@ -1,89 +1,107 @@
 # Cardify
 
-### Card Number and Expiry Date Validation Program
+## Overview
 
-This program is a Python script that validates card numbers and expiry dates using encryption technology. The program is developed using the PI-HEAAN (Homomorphic Encryption for Arithmetic of Approximate Numbers) library.
+Cardify is a Python web application that provides card number and expiry date validation using encryption technology. The program is built using the PI-HEAAN (Homomorphic Encryption for Arithmetic of Approximate Numbers) library. It allows users to input credit card information through a user-friendly web interface and validates the entered card number and expiry date.
 
-## Setup Environment
+## Installation
 
-1. Clone the Repository
+### Windows
 
-First, clone this repository to your local machine:
+1. **Clone the Repository:**
 
-```bash
-git clone https://github.com/jeonghyeonee/Cardify.git
-```
+   ```bash
+   git clone https://github.com/jeonghyeonee/Cardify.git
+   ```
 
-2. Install Python virtual environment
+2. **Setup Virtual Environment:**
+   ```bash
+   python -m venv your_virtual_environment_name
+   your_virtual_environment_name\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
-```bash
-python -m venv your_virtual_environment_name
-```
+### Linux / MacOS
 
-Replace `your_virtual_environment_name` with the name you want to use for your virtual environment.
+1. **Clone the Repository:**
 
-2. Activate the virtual environment
+   ```bash
+   git clone https://github.com/jeonghyeonee/Cardify.git
+   ```
 
-Windows:
+2. **Setup Virtual Environment:**
+   ```bash
+   python3 -m venv your_virtual_environment_name
+   source your_virtual_environment_name/bin/activate
+   pip install -r requirements.txt
+   ```
 
-```bash
-your_virtual_environment_name\Scripts\activate
-```
+## Usage
 
-Unix or MacOS:
+1. **Run the Web Application:**
 
-```bash
-source your_virtual_environment_name/bin/activate
-```
+   ```bash
+   python app.py
+   ```
 
-3. Install required packages
+2. **Access the Web Interface:**
+   Open your web browser and navigate to [http://localhost:5000](http://localhost:5000)
 
-```bash
-pip install -r requirements.txt
-```
+3. **Input Credit Card Information:**
+   Follow the prompts on the web page to input the credit card number and expiry date in the specified format.
 
-**Note:** If you encounter installation errors with the `pi-heaan` library, it's recommended to use Python version 3.8.x. Please ensure your Python version matches this recommendation before proceeding with the installation.
+4. **View Validation Result:**
+   The program will validate the entered card number and expiry date, determine the card brand, and display the validation result on the web page.
 
-## How to Run
+## Web Interface
 
-1. Before running the program, you need to install the HEAAN library. Refer to the official documentation of the HEAAN library for installation instructions.
-
-2. To run the program, execute the following command:
-
-```bash
-python validate_card.py
-```
-
-3. The program will prompt you to enter the card number and expiry date. It will then validate the entered card number and expiry date, and print the result.
+The web interface provides a user-friendly way to input credit card information and view the validation result.
 
 ### Input Credit Card Information
 
-Follow the prompts to input the credit card number and expiry date in the specified format.
+Follow the prompts on the web page to input the credit card number and expiry date in the specified format.
 
 Example:
 
 ```
-카드 번호를 입력하세요 (형식: xxxx-xxxx-xxxx-xxxx): 1234-5678-9012-3456
-카드 유효기간을 mm/yy 형태로 입력하세요: 12/25
+Card Number: 1234-5678-9012-3456
+Expiry Date: 12/25
 ```
 
 ### Output
 
-The script will validate the input card number and expiry date, encrypt the information, determine the brand of the card, and check if the card is still valid based on the expiry date.
+The validation result will be displayed on the web page, indicating whether the card number and expiry date are valid.
 
-Example Output:
+#### Master
 
-```
-입력한 카드 번호: 4234-5678-9012-3456
-입력한 유효기간: 12/25
-===========================================================================
-Method 1
-master
-Method 2
-master
-valid
-```
+##### Input
 
-## Notes
+![image](https://github.com/jeonghyeonee/Cardify/assets/33801356/33d252e6-e41f-465e-bd1f-882655bb4901)
 
-- This program is developed using the PI-HEAAN library. Installation and setup of the PI-HEAAN library are required.
+##### Result
+
+![image](https://github.com/jeonghyeonee/Cardify/assets/33801356/95d85a61-51cf-47d1-8b7f-ece922cca569)
+
+#### Visa
+
+##### Input
+
+![image](https://github.com/jeonghyeonee/Cardify/assets/33801356/4aa45991-1aab-45ee-8308-6f8088adc439)
+
+##### Result
+
+![image](https://github.com/jeonghyeonee/Cardify/assets/33801356/75c7d9ef-bf75-41b2-853c-bc915fd746f9)
+
+#### Invalid
+
+##### Input
+
+![image](https://github.com/jeonghyeonee/Cardify/assets/33801356/fbc93da0-03aa-40bf-bb9a-39fbc289118b)
+
+##### Result
+
+![image](https://github.com/jeonghyeonee/Cardify/assets/33801356/f98f9e58-9140-41da-b958-8ade16a59e16)
+
+### References
+
+[Test Card Numbers](https://support.bluesnap.com/docs/test-credit-card-numbers)

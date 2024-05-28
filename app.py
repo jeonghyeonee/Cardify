@@ -4,17 +4,25 @@ import json
 
 app = Flask(__name__)
 
-# 전역 변수를 초기화합니다.
+# Initialize global variables to store card information and validation result.
 card_info = {}
 validation_result = None
 
 @app.route('/')
 def index():
+    """
+    Render the main page with the card input form.
+    """
     return render_template('index.html')
 
 @app.route('/validate', methods=['POST'])
 def validate():
+    """
+    Handle form submission, process card information, and render the result page.
+    """
     global card_info, validation_result
+
+    # Collect card information from the form.
     card_info = {
         "card_number_1": request.form['card_number_1'],
         "card_number_2": request.form['card_number_2'],
@@ -23,29 +31,35 @@ def validate():
         "expiry_month": request.form['expiry_month'],
         "expiry_year": request.form['expiry_year']
     }
-    print("카드 정보를 성공적으로 받았습니다.")
+    print("Successfully received card information.")
     
-    # card_info를 JSON 문자열로 변환합니다.
+    # Convert card_info to a JSON string.
     card_info_json = json.dumps(card_info)
     
-    # subprocess를 사용하여 main.py를 실행하고 결과 값을 받습니다.
+    # Use subprocess to execute main.py with card_info_json and capture the result.
     result = subprocess.check_output(["python", "main.py", card_info_json])
     
-    # 결과 값을 validation_result에 저장합니다.
+    # Parse the result and store it in validation_result.
     validation_result = json.loads(result.decode("utf-8").strip())
     
-    print("validation result: ", validation_result)
+    print("Validation result: ", validation_result)
     
-    # 리디렉션 없이 현재 페이지에 머물기 위해 index.html을 다시 렌더링합니다.
+    # Render the result page without redirection to stay on the current page.
     return render_template('result.html', validation_result=validation_result)
 
 @app.route('/card-info', methods=['GET'])
 def get_card_info():
+    """
+    Return the current card information as JSON.
+    """
     global card_info
     return jsonify(card_info)
 
 @app.route('/result')
 def result():
+    """
+    Render the result page with the validation result.
+    """
     global validation_result
     return render_template('result.html', validation_result=validation_result)
 
