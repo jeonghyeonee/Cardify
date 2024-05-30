@@ -218,3 +218,24 @@ def check_expiry_date(ctxt, month_ctxt):
     if round(result_month_msg[0].real, 2) <= 0.5:
         msg = 0
         return msg  # NOT
+    # Check: month > 12
+    month_over = he.feat_msg_generate([0.12])
+    month_over_ctxt = he.encrypt(month_over)
+
+    result_month = he.comparing(month_ctxt, month_over_ctxt)
+    result_month_msg = he.decrypt(result_month)
+
+    if round(result_month_msg[0].real, 2) == 1:
+        msg = 0
+        return msg # NOT valid
+
+    result_date = he.subtract(ctxt, date_ctxt)
+    result_date_msg = he.decrypt(result_date)
+
+    # Set msg value: valid = 1, not valid = 0
+    if round(result_date_msg[0].real, 2) >= 0:
+        msg = 1  # valid
+    else:
+        msg = 0  # NOT valid
+
+    return msg
